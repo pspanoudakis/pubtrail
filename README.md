@@ -11,6 +11,8 @@ This application was implemented as a project for the course ID2216 Developing M
 - Bogdan Stefanescu
 - Pavlos Spanoudakis
 
+As an award-winning project, we also prepared a [short presentation](./docs/PubTrail_Project_Presentation.pdf) of our project to share our work and inspire our classmates.
+
 ## Tech Stack
 
 - **React Native** + **Expo** - cross-platform UI (Android, iOS, Web)
