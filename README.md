@@ -2,6 +2,15 @@
 
 **PubTrail** is a mobile application for creating, joining, and tracking pub crawls with real-time location features. It is built with React Native and Expo. PubTrail lets users create routes between pubs, invite friends, add photos, document each stop with location information and notes, and discover nearby crawls.
 
+## UX Prize 🏆 winning project 
+
+This application was implemented as a project for the course ID2216 Developing Mobile Applications at KTH, winning the UX Prize, which is awarded to projects that stand out for their attention to the use case, usability, and thoughtful design, possibly creating a need that was previously unknown.
+
+### Team Members
+- Filip Todosov
+- Bogdan Stefanescu
+- Pavlos Spanoudakis
+
 ## Tech Stack
 
 - **React Native** + **Expo** - cross-platform UI (Android, iOS, Web)
