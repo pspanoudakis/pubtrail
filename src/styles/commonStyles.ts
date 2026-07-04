@@ -1,0 +1,140 @@
+import { StyleSheet } from "react-native";
+import { SPACING, TYPOGRAPHY, COLORS, RADIUS } from "./theme";
+
+export const commonStyles = StyleSheet.create({
+    screenContent: {
+        padding: SPACING._20,
+    },
+    contentGap12: {
+        gap: SPACING._12,
+    },
+    contentGap14: {
+        gap: SPACING._14,
+    },
+    sectionTitle: {
+        fontSize: TYPOGRAPHY.sizes.sectionTitle,
+        color: COLORS.textPrimary,
+        fontWeight: TYPOGRAPHY.weights.bold,
+    },
+    rowBetweenCenter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    stopRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: SPACING._6,
+    },
+    stopLabel: {
+        fontSize: TYPOGRAPHY.sizes.subtitle,
+        color: COLORS.textPrimary,
+        fontWeight: TYPOGRAPHY.weights.medium,
+    },
+    iconPlainButton: {
+        paddingHorizontal: SPACING.xs,
+        paddingVertical: SPACING.xs,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    separator: {
+        height: 1,
+        backgroundColor: COLORS.divider,
+    },
+    card: {
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        borderRadius: RADIUS.lg,
+        padding: SPACING._14,
+        backgroundColor: COLORS.surface,
+        shadowColor: COLORS.shadow,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.06,
+        shadowRadius: 10,
+        elevation: 2,
+    },
+    cardTitle: {
+        fontSize: TYPOGRAPHY.sizes.subtitle,
+        color: COLORS.textPrimary,
+        fontWeight: TYPOGRAPHY.weights.bold,
+    },
+    cardMeta: {
+        fontSize: TYPOGRAPHY.sizes.meta,
+        color: COLORS.textSecondary,
+    },
+    participantsTitle: {
+        marginTop: SPACING.xxs,
+        fontSize: TYPOGRAPHY.sizes.subtitle,
+        color: COLORS.textPrimary,
+        fontWeight: TYPOGRAPHY.weights.bold,
+        textAlign: 'center',
+    },
+    participantsValue: {
+        textAlign: 'center',
+        fontSize: TYPOGRAPHY.sizes.title,
+        color: COLORS.textPrimary,
+        fontWeight: TYPOGRAPHY.weights.semibold,
+    },
+    formTitleRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: SPACING.sm,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.border,
+        paddingBottom: SPACING.sm,
+        minHeight: SPACING._38,
+    },
+    formTitleInput: {
+        flex: 1,
+        fontSize: TYPOGRAPHY.sizes.subtitle,
+        color: COLORS.textPrimary,
+        fontWeight: TYPOGRAPHY.weights.semibold,
+        paddingVertical: 0,
+    },
+    subtleText: {
+        fontSize: TYPOGRAPHY.sizes.body,
+        color: COLORS.textSecondary,
+    },
+    textInput: {
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        borderRadius: RADIUS.field,
+        paddingHorizontal: SPACING._12,
+        paddingVertical: SPACING._10,
+        fontSize: TYPOGRAPHY.sizes.body,
+        color: COLORS.textPrimary,
+        backgroundColor: COLORS.surface,
+    },
+    notesInput: {
+        minHeight: SPACING.notesMinHeight,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        borderRadius: RADIUS.field,
+        paddingHorizontal: SPACING._12,
+        paddingVertical: SPACING._10,
+        textAlignVertical: 'top',
+        fontSize: TYPOGRAPHY.sizes.body,
+        color: COLORS.textPrimary,
+        backgroundColor: COLORS.surface,
+    },
+    notesBox: {
+        minHeight: SPACING.notesMinHeight,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        borderRadius: RADIUS.field,
+        paddingHorizontal: SPACING._12,
+        paddingVertical: SPACING._10,
+        backgroundColor: COLORS.surface,
+        gap: SPACING._6,
+    },
+    notesLabel: {
+        fontSize: TYPOGRAPHY.sizes.label,
+        fontWeight: TYPOGRAPHY.weights.bold,
+        color: COLORS.textSecondary,
+    },
+    bodyText: {
+        fontSize: TYPOGRAPHY.sizes.body,
+        color: COLORS.textPrimary,
+    },
+});

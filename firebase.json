@@ -1,0 +1,39 @@
+{
+  "hosting": {
+    "public": "web",
+    "ignore": [
+      "firebase.json",
+      "**/.*"
+    ],
+    "rewrites": [
+      {
+        "source": "/join/**",
+        "destination": "/join/[code].html"
+      },
+      {
+        "source": "/viewCrawl/**/stops/**",
+        "destination": "/viewCrawl/[crawlUid]/stops/[stopUid].html"
+      },
+      {
+        "source": "/viewCrawl/**",
+        "destination": "/viewCrawl/[crawlUid].html"
+      },
+      {
+        "source": "/album/**",
+        "destination": "/album/[crawlUid].html"
+      },
+      {
+        "source": "/activeCrawl/stops/**",
+        "destination": "/activeCrawl/stops/[stopUid].html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "firestore": {
+    "database": "default",
+    "location": "eur3"
+  }
+}

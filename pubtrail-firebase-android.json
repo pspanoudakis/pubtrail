@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "724457149107",
+    "project_id": "pubtrail-73421",
+    "storage_bucket": "pubtrail-73421.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:724457149107:android:0e87118e10a4e79fb656c6",
+        "android_client_info": {
+          "package_name": "com.anonymous.pubtrail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "724457149107-o7c2dqp908d304e1oublfihjnelvpip2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5RXWCuUa5SEuC1IppAYcZzG4fU7bxYHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "724457149107-o7c2dqp908d304e1oublfihjnelvpip2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "724457149107-2t74hai6cueh5mphv4t2o3lsdjnnag67.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.anonymous.pubtrail"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
