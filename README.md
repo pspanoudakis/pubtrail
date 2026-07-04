@@ -4,14 +4,14 @@
 
 ## UX Prize 🏆 winning project 
 
-This application was implemented as a project for the course ID2216 Developing Mobile Applications at KTH, winning the UX Prize, which is awarded to projects that stand out for their attention to the use case, usability, and thoughtful design, possibly creating a need that was previously unknown.
+This application was implemented as a project for the course **ID2216 Developing Mobile Applications at KTH**, winning the **UX Prize**, which is awarded to projects that stand out for their attention to the use case, usability and well-thought design, possibly creating a need that was previously unknown.
 
 ### Team Members
 - Filip Todosov
 - Bogdan Stefanescu
 - Pavlos Spanoudakis
 
-As an award-winning project, we also prepared a [short presentation](./docs/PubTrail_Project_Presentation.pdf) of our project to share our work and inspire our classmates.
+As an award-winning project, we also prepared a [short presentation](./docs/PubTrail_Project_Presentation.pdf) of our app to share our work and inspire our classmates.
 
 ## Tech Stack
 
@@ -45,6 +45,51 @@ As an award-winning project, we also prepared a [short presentation](./docs/PubT
 - **Media Upload** - upload images taken using the camera to attach to a pub crawl
 - **Real Nearby Crawl Queries** - see live crawls that are currently nearby you, based on their latest stop
 - **Sobriety checker game** - A game that uses device's gyroscope to determine how drunk/sober you are
+
+### Demo screenshots
+
+Map-centric home screen UI, with quick action buttons & drawer menu:
+
+
+<div>
+   <img src="./docs/images/home.png" alt="Home screen" width="250vw" />
+   <img src="./docs/images/drawer_menu.png" alt="Drawer menu" width="250vw" />
+</div>
+
+
+All the information of your active crawl in one place:
+
+<div>
+   <img src="./docs/images/active_pubs_readonly.png" alt="Home screen" width="250vw" />
+   <img src="./docs/images/edit_active_crawl.png" alt="Drawer menu" width="250vw" />
+</div>
+
+Add and edit crawl stops:
+
+<div>
+   <img src="./docs/images/add_stop.png" alt="Home screen" width="250vw" />
+   <img src="./docs/images/edit_stop.png" alt="Drawer menu" width="250vw" />
+</div>
+
+Capture your favorite moments from your pub crawls:
+
+<div>
+   <img src="./docs/images/capture.png" alt="Home screen" width="250vw" />
+   <img src="./docs/images/submit_media.png" alt="Drawer menu" width="250vw" />
+</div>
+
+Check out nearby crawls, or your browse your previous ones:
+
+<div>
+   <img src="./docs/images/read_only_crawl.png" alt="Home screen" width="250vw" />
+   <img src="./docs/images/read_only_crawl2.png" alt="Drawer menu" width="250vw" />
+</div>
+
+Join others' crawls by scanning their QR code:
+
+<div>
+   <img src="./docs/images/share.png" alt="Home screen" width="250vw" />
+</div>
 
 ## Project File Structure
 
