@@ -91,6 +91,14 @@ Join others' crawls by scanning their QR code:
    <img src="./docs/images/share.png" alt="Home screen" width="250vw" />
 </div>
 
+Play a gyroscope-based minigame to check your sobriety level:
+
+<div>
+   <img src="./docs/images/sober.png" alt="Home screen" width="250vw" />
+   <img src="./docs/images/sober2.png" alt="Drawer menu" width="250vw" />
+   <img src="./docs/images/sober3.png" alt="Drawer menu" width="250vw" />
+</div>
+
 ## Project File Structure
 
 ```
