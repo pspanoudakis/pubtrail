@@ -1,0 +1,158 @@
+name: Release APK
+
+# Ships a build whenever the release branch moves: EAS builds the APK, the
+# artifact is pulled down, and a GitHub release is cut with it attached.
+on:
+  push:
+    branches: [release]
+  workflow_dispatch:
+
+# Never cancel a build in flight - an interrupted run leaves an orphaned EAS
+# build and possibly a half-created release.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write       # create tags/releases and upload assets
+  pull-requests: read   # read the merged PR body for the release notes
+
+jobs:
+  build-and-release:
+    name: Build APK & publish release
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # tags, so we can tell whether this version shipped already
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+          packager: npm
+
+      # app.config.ts imports from `expo/config`, so EAS cannot evaluate the
+      # app config without node_modules present.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run EAS build
+        id: eas
+        run: |
+          set -euo pipefail
+          eas build \
+            --platform android \
+            --profile preview \
+            --non-interactive \
+            --wait \
+            --json > eas-build.json
+
+          # --json emits an array of build objects; the APK lives on the first.
+          build=$(jq -c 'if type == "array" then .[0] else . end' eas-build.json)
+
+          apk_url=$(jq -r '.artifacts.applicationArchiveUrl // empty' <<<"$build")
+          build_id=$(jq -r '.id // empty' <<<"$build")
+          owner=$(jq -r '.project.ownerAccount.name // empty' <<<"$build")
+          slug=$(jq -r '.project.slug // empty' <<<"$build")
+
+          if [ -z "$apk_url" ]; then
+            echo "::error::EAS build finished without an APK artifact URL."
+            cat eas-build.json
+            exit 1
+          fi
+
+          if [ -n "$owner" ] && [ -n "$slug" ] && [ -n "$build_id" ]; then
+            build_page="https://expo.dev/accounts/$owner/projects/$slug/builds/$build_id"
+          else
+            build_page=""
+          fi
+
+          echo "apk_url=$apk_url" >> "$GITHUB_OUTPUT"
+          echo "build_page=$build_page" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          set -euo pipefail
+          version=$(node -p "require('./package.json').version")
+          tag="v$version"
+
+          # Same version pushed twice - keep the tag unique instead of failing.
+          if git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            tag="v$version-build.${GITHUB_RUN_NUMBER}"
+          fi
+
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Download APK
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          curl -fsSL "${{ steps.eas.outputs.apk_url }}" \
+            -o "dist/pubtrail-${{ steps.tag.outputs.tag }}.apk"
+          ls -lh dist
+
+      - name: Compose release notes from merged PR
+        id: notes
+        env:
+          BUILD_PAGE: ${{ steps.eas.outputs.build_page }}
+        run: |
+          set -euo pipefail
+          # The push to `release` is (normally) a PR merge, so this resolves the
+          # PR that brought the commit in.
+          gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" > pulls.json
+
+          # A commit can belong to several PRs (e.g. it also went through one
+          # into main) - prefer the one that actually targeted this branch.
+          jq --arg base "$GITHUB_REF_NAME" \
+             '[(.[] | select(.base.ref == $base)), .[]] | .[0] // {}' \
+             pulls.json > pr.json
+
+          pr_number=$(jq -r '.number // empty' pr.json)
+          pr_title=$(jq -r '.title // empty' pr.json)
+          jq -r '.body // ""' pr.json > pr-body.md
+
+          {
+            if [ -n "$pr_number" ]; then
+              echo "### $pr_title (#$pr_number)"
+              echo
+              if [ -s pr-body.md ]; then
+                cat pr-body.md
+              else
+                echo "_The merged PR had no description._"
+              fi
+            else
+              # Direct push to release, no PR to quote.
+              echo "### Changes"
+              echo
+              git log -1 --pretty=%B "$GITHUB_SHA"
+            fi
+            echo
+            echo "---"
+            echo
+            echo "- Commit: \`${GITHUB_SHA}\`"
+            if [ -n "$BUILD_PAGE" ]; then
+              echo "- EAS build: $BUILD_PAGE"
+            fi
+          } > release-notes.md
+
+          cat release-notes.md
+
+      - name: Create GitHub release
+        run: |
+          set -euo pipefail
+          gh release create "${{ steps.tag.outputs.tag }}" \
+            "dist/pubtrail-${{ steps.tag.outputs.tag }}.apk#PubTrail ${{ steps.tag.outputs.tag }} (Android APK)" \
+            --target "$GITHUB_SHA" \
+            --title "PubTrail ${{ steps.tag.outputs.tag }}" \
+            --notes-file release-notes.md
