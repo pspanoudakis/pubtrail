@@ -170,6 +170,8 @@ jobs:
       - name: Create GitHub release
         run: |
           set -euo pipefail
+          # Paths after the tag upload as release assets - this argument is what
+          # attaches the APK. Text after the "#" is its label on the release page.
           gh release create "${{ steps.tag.outputs.tag }}" \
             "dist/pubtrail-${{ steps.tag.outputs.tag }}.apk#PubTrail ${{ steps.tag.outputs.tag }} (Android APK)" \
             --target "$GITHUB_SHA" \
