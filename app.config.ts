@@ -1,10 +1,11 @@
 import { ExpoConfig, ConfigContext } from 'expo/config';
+import pkg from './package.json';
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "PubTrail",
   slug: "pubtrail",
   owner: "pavlos_spn",
-  version: "1.0.0",
+  version: pkg.version,
   orientation: "default",
   scheme: "pubtrail",
   userInterfaceStyle: "automatic",
