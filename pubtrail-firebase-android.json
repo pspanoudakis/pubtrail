@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "724457149107",
+    "firebase_url": "https://pubtrail-73421-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "pubtrail-73421",
     "storage_bucket": "pubtrail-73421.firebasestorage.app"
   },
@@ -13,6 +14,58 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "724457149107-gncsq3vm7c88sorojtk1nuvv6prvg427.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.anonymous.pubtrail",
+            "certificate_hash": "a5f5c7ad360954b1dd5f0d9bd9b6c9cf08ca6ba9"
+          }
+        },
+        {
+          "client_id": "724457149107-o7c2dqp908d304e1oublfihjnelvpip2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5RXWCuUa5SEuC1IppAYcZzG4fU7bxYHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "724457149107-o7c2dqp908d304e1oublfihjnelvpip2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "724457149107-2t74hai6cueh5mphv4t2o3lsdjnnag67.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.anonymous.pubtrail"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:724457149107:android:28f724b14daea764b656c6",
+        "android_client_info": {
+          "package_name": "com.pubtrail.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "724457149107-l7r3sh2re24al75fod0628eilfqa56ab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pubtrail.app",
+            "certificate_hash": "b0d7131368a1cf8d07de18d97cd021af56ea1ffb"
+          }
+        },
         {
           "client_id": "724457149107-o7c2dqp908d304e1oublfihjnelvpip2.apps.googleusercontent.com",
           "client_type": 3
