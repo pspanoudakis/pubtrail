@@ -1,4 +1,6 @@
 import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app"
+import { fetchAndActivate, getRemoteConfig, getValue, type RemoteConfig } from "firebase/remote-config";
+
 import {
     initializeAuth,
     //@ts-ignore
@@ -50,7 +52,26 @@ const getInternalAuth = (): Auth => {
 };
 
 const auth = getInternalAuth();
-export { firebaseApp, auth };
+const remoteConfig: RemoteConfig | null = Platform.OS === "web" ? getRemoteConfig(firebaseApp) : null;
+const remoteConfigValues: Record<string, string> = {};
+
+const loadRemoteConfigValues = async (): Promise<Record<string, string>> => {
+    if (!remoteConfig) {
+        return remoteConfigValues;
+    }
+
+    await fetchAndActivate(remoteConfig);
+
+    Object.keys(remoteConfig.defaultConfig).forEach((key) => {
+        remoteConfigValues[key] = getValue(remoteConfig, key).asString();
+    });
+
+    return remoteConfigValues;
+};
+
+void loadRemoteConfigValues();
+
+export { firebaseApp, auth, remoteConfig, remoteConfigValues };
 
 export const isFirebaseConfigured = Boolean(
     firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.appId
