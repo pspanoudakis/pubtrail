@@ -102,6 +102,7 @@ Play a gyroscope-based minigame to check your sobriety level:
 ## Project File Structure
 
 ```
+├── .github/workflows/               # CI: unit tests (test.yml), APK build + release (release.yml)
 ├── app.config.ts                    # Expo app configuration (name, icons, plugins, permissions)
 ├── babel.confg.cjs                  # Babel config with expo preset and module-resolver aliases
 ├── eas.json                         # EAS Build profiles (development, preview, production)
@@ -255,7 +256,7 @@ Play a gyroscope-based minigame to check your sobriety level:
 3. **Configure native Firebase** (for Android/iOS builds)
    - Download `pubtrail-firebase-android.json` from Firebase Console → place at the project root
    - Download `pubtrail-firebase-ios.plist` from Firebase Console → place at the project root
-   - Ensure your package name (`com.anonymous.pubtrail`) matches your Firebase project settings
+   - Ensure your package name (`com.pubtrail.app`) matches your Firebase project settings
 
 4. **Run the development server**
    ```bash
@@ -277,6 +278,46 @@ Play a gyroscope-based minigame to check your sobriety level:
    ```bash
    npm run web:publish
    ```
+
+## Automated Releases
+
+Pushing to the `release` branch runs [`.github/workflows/release.yml`](.github/workflows/release.yml):
+it builds an Android APK on EAS, downloads the artifact, and publishes a GitHub release
+with the APK attached. The release notes are taken from the description of the PR that was
+merged into `release`, so that is where to write them. The workflow can also be triggered
+manually from the Actions tab.
+
+Tags follow the app version - `v1.0.0` for the first release of a version, then
+`v1.0.0-build.<versionCode>` for later builds of the same version. EAS owns the
+`versionCode` (`appVersionSource: "remote"` in `eas.json`) and increments it per build,
+so bump `version` in `package.json` and `app.config.ts` when you want a fresh tag.
+
+### One-time setup
+
+1. **`EXPO_TOKEN` repository secret** - create an access token at [expo.dev](https://expo.dev)
+   under Access tokens, then add it in Settings → Secrets and variables → Actions.
+
+2. **EAS environment variables** - `.env` is gitignored, so it never reaches an EAS build.
+   Every `EXPO_PUBLIC_*` value must be registered with EAS or the APK ships with undefined
+   keys (maps, auth and weather silently break at runtime). Push the whole local file at once
+   (`--path` is required, since the flag defaults to `.env.local`):
+   ```bash
+   eas env:push preview --path .env
+   ```
+   Or set them one at a time, and check what the environment holds:
+   ```bash
+   eas env:set preview --name EXPO_PUBLIC_MAPBOX_TOKEN --value "<token>" --visibility sensitive
+   eas env:list preview
+   ```
+   Use `sensitive` rather than `secret` for these: `EXPO_PUBLIC_*` values are inlined into the
+   JS bundle and can be read out of the APK regardless, so `secret` would only be false comfort.
+
+3. **Android keystore** - a `--non-interactive` build cannot generate one. Run `eas credentials -p android`
+   once to create the keystore that will sign every release. Keep it: APKs signed with a
+   different key cannot be installed as an update over an existing one.
+
+4. **Workflow permissions** - Settings → Actions → General → Workflow permissions must be
+   "Read and write" so the job can create tags and releases.
 
 ## 3rd-Party UI Components
 
