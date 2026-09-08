@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# PubTrail pre-push hook.
+#
+# Runs the same checks CI enforces, before the code leaves your machine, so a
+# broken push never becomes a broken pull request. This hook is shared via the
+# repo: `npm install` points git at it through the "prepare" script
+# (git config core.hooksPath .githooks).
+#
+# Bypass in an emergency with:  git push --no-verify
+#
+set -e
+
+echo "pre-push> typecheck"
+npm run typecheck
+
+echo "pre-push> unit tests"
+npm test -- --ci --silent
+
+echo "pre-push> ok"

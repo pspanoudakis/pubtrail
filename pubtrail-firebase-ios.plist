@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>724457149107-2t74hai6cueh5mphv4t2o3lsdjnnag67.apps.googleusercontent.com</string>
+	<string>724457149107-dui12itm57f81iv2grm2p5b62c7tm258.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.724457149107-2t74hai6cueh5mphv4t2o3lsdjnnag67</string>
+	<string>com.googleusercontent.apps.724457149107-dui12itm57f81iv2grm2p5b62c7tm258</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>724457149107-elbfar635p023fuj25aq3uef97g0jcgo.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.anonymous.pubtrail</string>
+	<string>com.pubtrail.app</string>
 	<key>PROJECT_ID</key>
 	<string>pubtrail-73421</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:724457149107:ios:b2e85ed3953ffbd9b656c6</string>
+	<string>1:724457149107:ios:11c9acf670d09838b656c6</string>
+	<key>DATABASE_URL</key>
+	<string>https://pubtrail-73421-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>

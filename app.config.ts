@@ -3,6 +3,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "PubTrail",
   slug: "pubtrail",
+  owner: "pavlos_spn",
   version: "1.0.0",
   orientation: "default",
   scheme: "pubtrail",
@@ -13,13 +14,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: "#f6f1e8"
   },
   android: {
+    // Seed value only - eas.json sets appVersionSource: "remote", so EAS Build
+    // owns the real versionCode and auto-increments it per build.
     versionCode: 1,
     googleServicesFile: "./pubtrail-firebase-android.json",
     adaptiveIcon: {
       foregroundImage: "./assets/images/adaptive-foreground.png",
       backgroundColor: "#ffffff",
     },
-    package: "com.anonymous.pubtrail",
+    package: "com.pubtrail.app",
   },
   web: {
     bundler: "metro",
@@ -27,7 +30,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     eas: {
-      projectId: "12852f88-6bdb-4fca-872e-2448ba2ae1a2"
+      projectId: "910d50b4-331b-47e0-92d8-74560ad8f44c"
     }
   },
   plugins: [
@@ -61,7 +64,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "@react-native-async-storage/expo-with-async-storage"
   ],
   ios: {
-    bundleIdentifier: "com.anonymous.pubtrail",
+    bundleIdentifier: "com.pubtrail.app",
     googleServicesFile: "./pubtrail-firebase-ios.plist"
   }
 });
