@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
-import { commonStyles } from "@/styles/commonStyles";
-import { COLORS } from "@/styles/theme";
+import { useCommonStyles } from "@/styles/useCommonStyles";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 type CrawlVisibilitySectionProps = {
     isPublic: boolean,
@@ -13,6 +13,8 @@ export function CrawlVisibilitySection({
     onIsPublicChange,
     isEditable,
 }: CrawlVisibilitySectionProps) {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
     return (
         <View style={styles.container}>{
             isEditable ? <>
@@ -52,7 +54,7 @@ export function CrawlVisibilitySection({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     container: {
         flexDirection: "column",
         alignItems: "flex-start",
@@ -99,5 +101,5 @@ const styles = StyleSheet.create({
     segmentTextUnselected: {
         color: '#222',
     },
-});
+}));
 

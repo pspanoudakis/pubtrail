@@ -1,6 +1,7 @@
 import { Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { COLORS, RADIUS, SPACING } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type MapRefocusButtonProps = {
     onPress: () => void;
@@ -19,6 +20,8 @@ export function MapRefocusButton({
     right = 12,
     style,
 }: MapRefocusButtonProps) {
+    const styles = useStyles();
+    const { COLORS } = useTheme();
     return (
         <Pressable
             onPress={onPress}
@@ -39,7 +42,7 @@ export function MapRefocusButton({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, RADIUS }) => StyleSheet.create({
     button: {
         position: "absolute",
         alignItems: "center",
@@ -51,4 +54,4 @@ const styles = StyleSheet.create({
         padding: SPACING.xs,
         zIndex: 10,
     },
-});
+}));

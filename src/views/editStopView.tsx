@@ -3,8 +3,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View, Platform, TouchableOpacity } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { COLORS } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { ScreenLoader } from "@/views/components/ScreenLoader";
 import { ActionButton } from "@/views/components/ActionButton";
 import { ViewOnlyMapPanel } from "@/views/components/ViewOnlyMapPanel";
@@ -12,6 +11,8 @@ import type { NearbyPlace } from "@/mapboxConfig";
 import { formatDateTimeLong } from "@/utils/dateUtils";
 import type { GeoCoordinates } from "@/utils/geo";
 import { RefreshIndicator } from "@/views/components/RefreshIndicator";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type EditStopViewProps = {
     isLoading?: boolean;
@@ -62,6 +63,9 @@ export function EditStopView({
     onNearbyPlacePress,
     onCustomPlacePress,
 }: EditStopViewProps): ReactElement {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
 
     const customNameInputRef = useRef<TextInput>(null);
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -302,7 +306,7 @@ export function EditStopView({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     nearbyPlacesSection: {
         gap: 12,
     },
@@ -367,7 +371,7 @@ const styles = StyleSheet.create({
         paddingVertical: 0,
         paddingHorizontal: 0,
     },
-});
+}));
 
 function formatDistance(distanceInMeters: number): string {
     if (distanceInMeters < 1000) {

@@ -10,7 +10,7 @@ import {
     useWindowDimensions,
     View,
 } from "react-native";
-import { COLORS, RADIUS, SPACING } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 type GestureBottomSheetProps = {
     collapsedHeight: number;
@@ -35,6 +35,7 @@ export function GestureBottomSheet({
     handleAreaStyle,
     sheetStyle,
 }: GestureBottomSheetProps): ReactElement {
+    const styles = useStyles();
     const { height: screenHeight } = useWindowDimensions();
 
     const [expanded, setExpanded] = useState(false);
@@ -127,7 +128,7 @@ export function GestureBottomSheet({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, RADIUS }) => StyleSheet.create({
     sheet: {
         position: "absolute",
         left: 0,
@@ -165,4 +166,4 @@ const styles = StyleSheet.create({
     sheetScroll: {
         flex: 1,
     },
-});
+}));

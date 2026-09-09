@@ -2,9 +2,10 @@ import { ReactElement } from "react";
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import { CameraView } from "expo-camera";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { ActionButton } from "@/views/components/ActionButton";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type JoinCrawlViewProps = {
     permissionGranted: boolean;
@@ -31,6 +32,9 @@ export function JoinCrawlView({
     onBarcodeScanned,
     onSubmitManualId,
 }: JoinCrawlViewProps): ReactElement {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     const canUseCamera = Platform.OS !== "web";
 
     return (
@@ -93,7 +97,7 @@ export function JoinCrawlView({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     container: {
         flex: 1,
         gap: SPACING.md,
@@ -152,4 +156,4 @@ const styles = StyleSheet.create({
         color: COLORS.error,
         fontSize: TYPOGRAPHY.sizes.small,
     },
-});
+}));

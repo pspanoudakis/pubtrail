@@ -1,8 +1,9 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import {ReactElement} from "react";
 import {Pressable, StyleSheet, Text, View} from "react-native";
-import {COLORS, RADIUS, SPACING, TYPOGRAPHY} from "@/styles/theme";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type IndexQuickActionsOverlayProps = {
     hasActiveCrawl: boolean,
@@ -16,6 +17,8 @@ type IndexQuickActionsOverlayProps = {
 };
 
 export function IndexQuickActionsOverlay(props: IndexQuickActionsOverlayProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS, SPACING } = useTheme();
     const insets = useSafeAreaInsets();
 
     return (
@@ -80,7 +83,7 @@ export function IndexQuickActionsOverlay(props: IndexQuickActionsOverlayProps): 
 
 
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     overlayRoot: {
         ...StyleSheet.absoluteFillObject,
         zIndex: 10,
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
         paddingHorizontal: SPACING._12,
-        backgroundColor: "rgba(255, 249, 239, 0.92)",
+        backgroundColor: COLORS.background,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: COLORS.border,
     },
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
         gap: SPACING.xs,
         paddingHorizontal: SPACING.sm,
         paddingVertical: SPACING._10,
-        backgroundColor: "rgba(255, 249, 239, 0.92)",
+        backgroundColor: COLORS.background,
         borderRadius: RADIUS.pill,
         borderWidth: StyleSheet.hairlineWidth,
         borderColor: COLORS.border,
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
         fontSize: TYPOGRAPHY.sizes.small,
         fontWeight: "600",
     },
-});
+}));
 
 
 

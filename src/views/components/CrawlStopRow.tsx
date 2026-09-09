@@ -1,9 +1,9 @@
 import { ReactElement } from "react";
 import { Pressable, Text, View } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { COLORS } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { formatDateTimeShort } from "@/utils/dateUtils";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type CrawlStopRowProps = {
     index: number;
@@ -22,6 +22,8 @@ export function CrawlStopRow({
     onPress,
     disabled = false,
 }: CrawlStopRowProps): ReactElement {
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     const isPressable = Boolean(onPress) && !disabled;
     return (
         <View>

@@ -10,10 +10,11 @@ import {
 import { CameraView } from "expo-camera";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { ActionButton } from "@/views/components/ActionButton";
 import { WatermarkedPhoto, WatermarkedPhotoHandle } from "@/views/components/WatermarkedPhoto";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 export type PendingCapture = {
     uri: string;
@@ -49,6 +50,9 @@ export function CaptureMediaView({
     onRetake,
     onCancel,
 }: CaptureMediaViewProps): ReactElement {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     const canUseCamera = Platform.OS !== "web";
 
     if (!canUseCamera) {
@@ -186,7 +190,7 @@ export function CaptureMediaView({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     container: {
         flex: 1,
         padding: SPACING.md,
@@ -296,4 +300,4 @@ const styles = StyleSheet.create({
     previewActions: {
         gap: SPACING.sm,
     },
-});
+}));

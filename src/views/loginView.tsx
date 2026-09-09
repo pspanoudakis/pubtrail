@@ -1,6 +1,7 @@
 import { View, Text, TextInput, Pressable, StyleSheet, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
-import { COLORS, SPACING, TYPOGRAPHY, RADIUS } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 interface LoginViewProps {
     email: string;
@@ -16,6 +17,8 @@ interface LoginViewProps {
 }
 
 export function LoginView(props: LoginViewProps) {
+    const styles = useStyles();
+    const { COLORS } = useTheme();
     return (
         <View style={styles.container}>
             <Image
@@ -121,7 +124,7 @@ export function LoginView(props: LoginViewProps) {
     }
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
@@ -212,4 +215,4 @@ const styles = StyleSheet.create({
         color: COLORS.textSecondary,
         fontSize: TYPOGRAPHY.sizes.small,
     },
-});
+}));

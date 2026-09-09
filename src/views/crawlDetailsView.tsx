@@ -6,8 +6,7 @@ import {
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import {DEFAULT_LOCATION, GeoCoordinates} from "@/utils/geo";
-import { commonStyles } from "@/styles/commonStyles";
-import { COLORS, SPACING, TYPOGRAPHY } from "@/styles/theme";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { ParticipantsAvatarStrip } from "@/views/components/ParticipantsAvatarStrip";
 import { ScreenLoader } from "@/views/components/ScreenLoader";
 import { ActionButton } from "@/views/components/ActionButton";
@@ -16,6 +15,8 @@ import { CrawlStopRow } from "@/views/components/CrawlStopRow";
 import { FullScreenMap } from "@/views/components/FullScreenMap";
 import { GestureBottomSheet } from "@/views/components/GestureBottomSheet";
 import { pluralize } from "./shared/shared";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type CrawlDetailsViewProps = {
     isLoading?: boolean;
@@ -48,6 +49,9 @@ export function CrawlDetailsView({
     onOpenAlbum,
     onAddMedia,
 }: CrawlDetailsViewProps): ReactElement {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
+    const { COLORS, SPACING } = useTheme();
     if (isLoading) {
         return <ScreenLoader label="Loading crawl details..." />;
     }
@@ -153,7 +157,7 @@ export function CrawlDetailsView({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY }) => StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.background,
@@ -211,4 +215,4 @@ const styles = StyleSheet.create({
         paddingTop: SPACING._14,
         paddingBottom: SPACING.xl,
     },
-});
+}));

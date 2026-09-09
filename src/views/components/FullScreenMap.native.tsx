@@ -3,8 +3,9 @@ import { ReactElement, useRef, useEffect } from "react";
 import Mapbox from "@/mapboxConfig";
 import { coordinatesToArray, GeoCoordinates } from "@/utils/geo";
 import { MapOverlay } from "@/views/components/mapOverlay";
-import { COLORS } from "@/styles/theme";
 import { MapRefocusButton } from "@/views/components/MapRefocusButton";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 interface FullScreenMapProps {
     isLocationGranted: boolean;
@@ -25,6 +26,8 @@ export function FullScreenMap({
     bottomPadding,
     showSheen,
 }: FullScreenMapProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS } = useTheme();
     const cameraRef = useRef<Mapbox.Camera>(null);
     const opacity = useRef(new Animated.Value(0)).current;
     const hasCompletedInitialRender = useRef(false);
@@ -144,7 +147,7 @@ export function FullScreenMap({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     container: {
         flex: 1,
     },
@@ -170,4 +173,4 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         backgroundColor: "rgba(0,0,0,0.05)",
     },
-});
+}));

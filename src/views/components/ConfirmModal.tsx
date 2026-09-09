@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type ConfirmModalProps = {
     visible: boolean;
@@ -27,6 +28,8 @@ export function ConfirmModal({
     onConfirm,
     onCancel,
 }: ConfirmModalProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS } = useTheme();
     const isConfirmDisabled = confirmDisabled || isConfirmLoading;
     const confirmButtonColor = destructive ? COLORS.error : COLORS.primary;
 
@@ -68,7 +71,7 @@ export function ConfirmModal({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     backdrop: {
         flex: 1,
         backgroundColor: "rgba(0, 0, 0, 0.45)",
@@ -135,4 +138,4 @@ const styles = StyleSheet.create({
     buttonDisabled: {
         opacity: 0.7,
     },
-});
+}));

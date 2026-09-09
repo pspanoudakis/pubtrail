@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View, Pressable, StyleSheet } from "react-native";
-import { COLORS, SPACING, RADIUS, TYPOGRAPHY } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 export interface ExternalJoinViewProps {
     code: string;
@@ -9,6 +9,7 @@ export interface ExternalJoinViewProps {
 }
 
 export function ExternalJoinView({ code, onOpen, onJoinBrowser }: ExternalJoinViewProps) {
+    const styles = useStyles();
     return (
         <View style={styles.container}>
             <Text style={styles.label}>Joining Crawl with Code:</Text>
@@ -25,7 +26,7 @@ export function ExternalJoinView({ code, onOpen, onJoinBrowser }: ExternalJoinVi
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     container: { padding: SPACING.md, alignItems: "center" },
     label: { fontSize: TYPOGRAPHY.sizes.body, marginBottom: SPACING.sm },
     code: { fontWeight: TYPOGRAPHY.weights.semibold, marginBottom: SPACING.md },
@@ -50,5 +51,5 @@ const styles = StyleSheet.create({
         opacity: 0.7,
     },
     buttonSecondaryText: { color: COLORS.primary, fontWeight: TYPOGRAPHY.weights.semibold },
-});
+}));
 

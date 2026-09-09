@@ -1,11 +1,12 @@
 import { ReactElement } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { COLORS } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { ScreenLoader } from "@/views/components/ScreenLoader";
 import { ViewOnlyMapPanel } from "@/views/components/ViewOnlyMapPanel";
 import type { GeoCoordinates } from "@/utils/geo";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type ViewCrawlStopViewProps = {
     isLoading?: boolean;
@@ -22,6 +23,9 @@ export function ViewCrawlStopView({
     stopCoordinates,
     visitedOn,
 }: ViewCrawlStopViewProps): ReactElement {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     if (isLoading) {
         return <ScreenLoader label="Loading stop details..." />;
     }
@@ -66,10 +70,10 @@ export function ViewCrawlStopView({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     locationText: {
         fontSize: 18,
         color: COLORS.textPrimary,
         fontWeight: "600",
     },
-});
+}));

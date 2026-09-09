@@ -1,7 +1,7 @@
 import {Drawer} from "expo-router/drawer";
 import {ReactElement} from "react";
-import {COLORS} from "@/styles/theme";
 import {AppDrawerContent} from "./AppDrawerContent";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type AppLayoutViewProps = {
     isLoggedIn: boolean,
@@ -13,6 +13,7 @@ type AppLayoutViewProps = {
 };
 
 export function AppLayoutView(props: AppLayoutViewProps): ReactElement {
+    const { COLORS } = useTheme();
     return (
         <Drawer
             initialRouteName={"index"}

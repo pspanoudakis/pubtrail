@@ -4,14 +4,18 @@ import {DrawerContentComponentProps, DrawerContentScrollView} from "@react-navig
 import {ReactElement, useMemo} from "react";
 import {Pressable, StyleSheet, Text, View} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {COLORS, RADIUS, SPACING, TYPOGRAPHY} from "@/styles/theme";
 import {router} from "expo-router";
+import {getFeatureFlag, type FeatureFlagKey} from "@/featureFlags";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type DrawerEntry = {
     routeName: string;
     label: string;
     description: string;
     icon: React.ComponentProps<typeof MaterialIcons>["name"];
+    // Entry is only listed while this flag is on. Omit to always list it.
+    featureFlag?: FeatureFlagKey;
 };
 // ShowDuringCrawl: true - only while crawl is active, false - only when crawl inactive, undefined - always show
 const DRAWER_GROUPS: Array<{ title: string; showDuringCrawl?: boolean; items: DrawerEntry[] }> = [
@@ -82,6 +86,7 @@ const DRAWER_GROUPS: Array<{ title: string; showDuringCrawl?: boolean; items: Dr
                 label: "Sober Check",
                 description: "Quick self-check before heading out",
                 icon: "local-bar",
+                featureFlag: "enableSoberTest",
             },
 
         ],
@@ -107,11 +112,31 @@ export function AppDrawerContent({
     isLoggedIn,
     isActiveCrawl
 }: AppDrawerContentProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS, SPACING } = useTheme();
     const insets = useSafeAreaInsets();
     const activeRouteName = useMemo(() => {
         const routeName = drawerProps.state.routeNames[drawerProps.state.index] ?? "/";
         return routeName === "index" ? "/" : routeName;
     }, [drawerProps.state.routeNames, drawerProps.state.index]);
+
+    // Resolved before the first render by the flag gate in the root layout.
+    const soberTestEnabled = getFeatureFlag("enableSoberTest");
+
+    const visibleGroups = useMemo(() => {
+        // Add an entry here when a new flag gates a drawer item.
+        const flagValues: Partial<Record<FeatureFlagKey, boolean>> = {
+            enableSoberTest: soberTestEnabled,
+        };
+
+        return DRAWER_GROUPS
+            .filter((group) => group.showDuringCrawl === undefined || group.showDuringCrawl === isActiveCrawl)
+            .map((group) => ({
+                ...group,
+                items: group.items.filter((item) => !item.featureFlag || flagValues[item.featureFlag] === true),
+            }))
+            .filter((group) => group.items.length > 0);
+    }, [isActiveCrawl, soberTestEnabled]);
 
     function onNavigate(routeName: string) {
         router.navigate(routeName);
@@ -142,7 +167,7 @@ export function AppDrawerContent({
             </View>
 
             <View style={styles.sectionsWrap}>
-                {DRAWER_GROUPS.filter(item => item.showDuringCrawl === undefined || item.showDuringCrawl === isActiveCrawl).map((group) => (
+                {visibleGroups.map((group) => (
                     <View key={group.title} style={styles.section}>
                         <Text style={styles.sectionTitle}>{group.title}</Text>
                         <View style={styles.sectionItems}>
@@ -216,7 +241,7 @@ export function AppDrawerContent({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     headerRow: {
         flexDirection: "row",
         alignItems: "center",
@@ -343,7 +368,7 @@ const styles = StyleSheet.create({
         fontSize: TYPOGRAPHY.sizes.small,
         lineHeight: 18,
     },
-});
+}));
 
 
 

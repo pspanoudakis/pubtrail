@@ -1,6 +1,7 @@
 import { ReactElement, ReactNode } from "react";
 import { Pressable, View, ActivityIndicator, Text, StyleSheet } from "react-native";
-import { COLORS } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 export type ActionButtonProps = {
     label: string;
@@ -15,6 +16,8 @@ export type ActionButtonProps = {
 export function ActionButton({
     label, onPress, compact, icon, loading = false, disabled = false, loadingLabel,
 }: ActionButtonProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS } = useTheme();
     const isDisabled = disabled || loading;
     const displayLabel = loading && loadingLabel ? loadingLabel : label;
 
@@ -40,7 +43,7 @@ export function ActionButton({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     actionButton: {
         borderWidth: 1,
         borderColor: COLORS.primary,
@@ -77,4 +80,4 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-});
+}));
