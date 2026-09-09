@@ -1,18 +1,22 @@
-import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app"
-import { fetchAndActivate, getRemoteConfig, getValue, type RemoteConfig } from "firebase/remote-config";
+import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
+import {
+    fetchAndActivate,
+    getRemoteConfig,
+    getValue,
+} from "firebase/remote-config";
 
 import {
     initializeAuth,
     //@ts-ignore
-    getReactNativePersistence,  // Method exists on native, compiler complains about web, but we don't use it there.
-    type Auth, getAuth
-} from 'firebase/auth';
+    getReactNativePersistence,
+    type Auth,
+    getAuth,
+} from "firebase/auth";
 import { firebaseConfig } from "@/firebaseEnv";
 import { createAsyncStorage } from "@react-native-async-storage/async-storage";
 import { Platform } from "react-native";
-import {GoogleSignin} from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
-// node_modules/@firebase/app/dist/app.d.ts (Private api)
 interface FirebaseAppInternal extends FirebaseApp {
     container?: {
         getProvider(name: string): {
@@ -21,21 +25,23 @@ interface FirebaseAppInternal extends FirebaseApp {
         };
     };
 }
-const firebaseApp: FirebaseApp  = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
-// Set the Web Client ID for token verification
-// Navive login prompt
+const firebaseApp: FirebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+
 GoogleSignin.configure({
     webClientId: firebaseConfig.googleClientId,
-    scopes: ["https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile"],
+    scopes: [
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/userinfo.profile",
+    ],
     offlineAccess: false,
 });
+
 const getInternalAuth = (): Auth => {
     if (Platform.OS === "web") {
         return getAuth(firebaseApp);
     }
-    // Check if Auth has already been initialized to prevent Hot-Reload errors
-    // Not needed in prod app
+
     const appAny = firebaseApp as FirebaseAppInternal;
     const authProvider = appAny.container?.getProvider("auth");
 
@@ -45,31 +51,54 @@ const getInternalAuth = (): Auth => {
 
     const persistence = createAsyncStorage("app");
 
-    // Initialize for the first time
     return initializeAuth(firebaseApp, {
         persistence: getReactNativePersistence(persistence),
     });
 };
 
 const auth = getInternalAuth();
-const remoteConfig: RemoteConfig | null = Platform.OS === "web" ? getRemoteConfig(firebaseApp) : null;
-const remoteConfigValues: Record<string, string> = {};
+const remoteConfig = getRemoteConfig(firebaseApp);
 
-const loadRemoteConfigValues = async (): Promise<Record<string, string>> => {
+const DEFAULT_REMOTE_CONFIG_VALUES: Record<string, boolean> = {
+    useAltTheme: false,
+};
+
+const remoteConfigValues: Record<string, boolean> = { ...DEFAULT_REMOTE_CONFIG_VALUES };
+
+
+export const initializeRemoteConfig = async (): Promise<Record<string, boolean>> => {
     if (!remoteConfig) {
         return remoteConfigValues;
     }
 
-    await fetchAndActivate(remoteConfig);
+    remoteConfig.settings.minimumFetchIntervalMillis = 0; // 10 seconds for testing purposes, adjust as needed
 
-    Object.keys(remoteConfig.defaultConfig).forEach((key) => {
-        remoteConfigValues[key] = getValue(remoteConfig, key).asString();
+    try {
+        await fetchAndActivate(remoteConfig);
+    } catch {
+        return remoteConfigValues;
+    }
+
+    Object.keys(DEFAULT_REMOTE_CONFIG_VALUES).forEach((key) => {
+        remoteConfigValues[key] = getValue(remoteConfig, key).asBoolean();
     });
 
     return remoteConfigValues;
 };
 
-void loadRemoteConfigValues();
+export const getRemoteConfigValue = (key: string): boolean => {
+    if (!remoteConfig) {
+        return DEFAULT_REMOTE_CONFIG_VALUES[key] ?? false;
+    }
+
+    const value =  getValue(remoteConfig, key).asBoolean();
+    console.log(`Remote config value for key "${key}": ${value}`);
+    return value ?? DEFAULT_REMOTE_CONFIG_VALUES[key] ?? false;
+};
+
+if (Platform.OS === "web" && typeof indexedDB !== "undefined") {
+    void initializeRemoteConfig();
+}
 
 export { firebaseApp, auth, remoteConfig, remoteConfigValues };
 
