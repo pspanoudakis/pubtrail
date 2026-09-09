@@ -1,11 +1,12 @@
 import { ReactElement, useEffect, useMemo, useRef } from "react";
 import { ActivityIndicator, Animated, StyleSheet, Text, View } from "react-native";
 import Mapbox from "@/mapboxConfig";
-import { COLORS } from "@/styles/theme";
 import { MapRefocusButton } from "./MapRefocusButton";
 import { coordinatesToArray, DEFAULT_LOCATION, type GeoCoordinates } from "@/utils/geo";
 import { MapStopMarkerShape } from "./MapStopMarkerShape";
 import { MapUserLocationMarker } from "./MapUserLocationMarker";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type ViewOnlyMapPanelProps = {
     coordinates?: GeoCoordinates;
@@ -26,6 +27,8 @@ export function ViewOnlyMapPanel({
     height = 340,
     onMapInteractionChange,
 }: ViewOnlyMapPanelProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS } = useTheme();
     const mapOpacity = useRef(new Animated.Value(0)).current;
     const cameraRef = useRef<Mapbox.Camera>(null);
     const didRevealMapRef = useRef(false);
@@ -200,7 +203,7 @@ export function ViewOnlyMapPanel({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     mapSection: {
         gap: 8,
     },
@@ -295,4 +298,4 @@ const styles = StyleSheet.create({
         borderRadius: 4.5,
         backgroundColor: COLORS.secondary,
     },
-});
+}));

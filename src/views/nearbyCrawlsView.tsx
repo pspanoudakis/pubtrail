@@ -1,8 +1,9 @@
 import { ReactElement } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { ScreenLoader } from "@/views/components/ScreenLoader";
 import { RefreshIndicator } from "@/views/components/RefreshIndicator";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 export type NearbyCrawlCard = {
     id: string;
@@ -28,6 +29,8 @@ export function NearbyCrawlsView({
     onRefresh,
     onSelectCrawl,
 }: NearbyCrawlsViewProps): ReactElement {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
     if (isLoading) {
         return <ScreenLoader label="Loading nearby crawls..." />;
     }
@@ -57,9 +60,9 @@ export function NearbyCrawlsView({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(() => StyleSheet.create({
     cardTitle: {
         fontSize: 19,
         marginBottom: 4,
     },
-});
+}));

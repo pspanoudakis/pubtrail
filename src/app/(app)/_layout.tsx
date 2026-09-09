@@ -1,10 +1,11 @@
 import { Stack } from "expo-router";
 import { ReactElement } from "react";
-import { COLORS, TYPOGRAPHY } from "@/styles/theme";
 import BackButton from "@/views/components/BackButton";
+import { useTheme } from "@/styles/ThemeProvider";
 
 
 export default function AppGroupLayout(): ReactElement {
+    const { COLORS, TYPOGRAPHY } = useTheme();
     return (
         <Stack
             screenOptions={{

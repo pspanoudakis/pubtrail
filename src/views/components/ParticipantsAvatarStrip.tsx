@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { View, Image, Text, StyleSheet, ImageStyle, StyleProp, Platform } from "react-native";
-import { COLORS } from "@/styles/theme";
 import { FallBackUserAvatar } from "./FallbackUserAvatar";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 export const MAX_VISIBLE_PARTICIPANTS = 3;
 
@@ -59,6 +59,7 @@ const AvatarImage = ({ uri, style }: AvatarImageProps): ReactElement => {
 };
 
 export function ParticipantsAvatarStrip({ avatarUrls }: ParticipantsAvatarStripProps): ReactElement | null {
+    const styles = useStyles();
     if (!avatarUrls.length) {
         return null;
     }
@@ -84,7 +85,7 @@ export function ParticipantsAvatarStrip({ avatarUrls }: ParticipantsAvatarStripP
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     avatarRow: {
         flexDirection: "row",
         alignItems: "center",
@@ -115,4 +116,4 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         color: COLORS.textSecondary,
     },
-});
+}));

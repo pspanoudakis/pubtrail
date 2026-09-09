@@ -1,6 +1,6 @@
 import { ReactElement, ReactNode } from "react";
 import { Pressable, View, Text, StyleSheet } from "react-native";
-import { COLORS } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 export type HomeTileProps = {
     label: string;
@@ -9,6 +9,7 @@ export type HomeTileProps = {
 };
 
 export function HomeTile({ label, icon, onPress }: HomeTileProps): ReactElement {
+    const styles = useStyles();
     return (
         <Pressable onPress={onPress} style={styles.homeTile}>
             <View style={styles.homeTileIcon}>{icon}</View>
@@ -17,7 +18,7 @@ export function HomeTile({ label, icon, onPress }: HomeTileProps): ReactElement 
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     homeTile: {
         width: "100%",
         minHeight: 60,
@@ -46,4 +47,4 @@ const styles = StyleSheet.create({
         color: COLORS.textPrimary,
         paddingTop: 8,
     },
-});
+}));

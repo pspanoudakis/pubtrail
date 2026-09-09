@@ -1,8 +1,9 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import {ReactElement} from "react";
 import {Pressable, StyleSheet, Text, View} from "react-native";
-import {COLORS, RADIUS, SPACING, TYPOGRAPHY} from "@/styles/theme";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type IndexQuickActionsOverlayProps = {
     hasActiveCrawl: boolean,
@@ -16,6 +17,8 @@ type IndexQuickActionsOverlayProps = {
 };
 
 export function IndexQuickActionsOverlay(props: IndexQuickActionsOverlayProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS, SPACING } = useTheme();
     const insets = useSafeAreaInsets();
 
     return (
@@ -80,7 +83,7 @@ export function IndexQuickActionsOverlay(props: IndexQuickActionsOverlayProps): 
 
 
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     overlayRoot: {
         ...StyleSheet.absoluteFillObject,
         zIndex: 10,
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
         fontSize: TYPOGRAPHY.sizes.small,
         fontWeight: "600",
     },
-});
+}));
 
 
 

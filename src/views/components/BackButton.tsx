@@ -2,10 +2,11 @@ import React from "react";
 import { Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router"; // Add useNavigation
-import { COLORS } from "@/styles/theme";
 import type { ReactElement } from "react";
+import { useTheme } from "@/styles/ThemeProvider";
 
 export default function BackButton(): ReactElement {
+    const { COLORS } = useTheme();
 
     const navigation = useNavigation();
 

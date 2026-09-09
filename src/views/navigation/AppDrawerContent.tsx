@@ -4,9 +4,10 @@ import {DrawerContentComponentProps, DrawerContentScrollView} from "@react-navig
 import {ReactElement, useMemo} from "react";
 import {Pressable, StyleSheet, Text, View} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import {COLORS, RADIUS, SPACING, TYPOGRAPHY} from "@/styles/theme";
 import {router} from "expo-router";
 import {getFeatureFlag, type FeatureFlagKey} from "@/featureFlags";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type DrawerEntry = {
     routeName: string;
@@ -111,6 +112,8 @@ export function AppDrawerContent({
     isLoggedIn,
     isActiveCrawl
 }: AppDrawerContentProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS, SPACING } = useTheme();
     const insets = useSafeAreaInsets();
     const activeRouteName = useMemo(() => {
         const routeName = drawerProps.state.routeNames[drawerProps.state.index] ?? "/";
@@ -238,7 +241,7 @@ export function AppDrawerContent({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     headerRow: {
         flexDirection: "row",
         alignItems: "center",
@@ -365,7 +368,7 @@ const styles = StyleSheet.create({
         fontSize: TYPOGRAPHY.sizes.small,
         lineHeight: 18,
     },
-});
+}));
 
 
 

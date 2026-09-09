@@ -1,8 +1,8 @@
 import { TextInput, View } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import { commonStyles } from "@/styles/commonStyles";
-import { COLORS } from "@/styles/theme";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { ReactElement } from "react";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type TitleInputProps = {
     value: string;
@@ -12,6 +12,8 @@ type TitleInputProps = {
 };
 
 export function TitleInput({ value, onChangeText, placeholder, editable = true }: TitleInputProps): ReactElement {
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     return (
         <View style={commonStyles.formTitleRow}>
             <FontAwesome5 name={editable ? "pencil-alt" : "glass-cheers"} size={20} color={COLORS.icon} />
