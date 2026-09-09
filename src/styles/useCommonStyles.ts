@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
-import { SPACING, TYPOGRAPHY, COLORS, RADIUS } from "./theme";
+import { createThemedStyles } from "./createThemedStyles";
 
-export const commonStyles = StyleSheet.create({
+export const useCommonStyles = createThemedStyles(({ SPACING, TYPOGRAPHY, COLORS, RADIUS }) => StyleSheet.create({
     screenContent: {
         padding: SPACING._20,
     },
@@ -137,4 +137,4 @@ export const commonStyles = StyleSheet.create({
         fontSize: TYPOGRAPHY.sizes.body,
         color: COLORS.textPrimary,
     },
-});
+}));

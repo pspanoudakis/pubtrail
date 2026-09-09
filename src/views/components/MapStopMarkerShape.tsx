@@ -1,7 +1,8 @@
 import { StyleSheet, View } from "react-native";
-import { COLORS } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 export function MapStopMarkerShape() {
+    const styles = useStyles();
     return (
         <View style={styles.pinOuter}>
             <View style={styles.pinInner} />
@@ -9,7 +10,7 @@ export function MapStopMarkerShape() {
     )
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     pinOuter: {
         width: 28,
         height: 28,
@@ -31,4 +32,4 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         backgroundColor: COLORS.primary,
     },
-});
+}));

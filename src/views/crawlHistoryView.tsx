@@ -1,12 +1,12 @@
 import { ReactElement } from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { COLORS } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { ScreenLoader } from "@/views/components/ScreenLoader";
 import { ActionButton } from "@/views/components/ActionButton";
 import { CrawlHistoryItem } from "../types/crawlHistoryItem";
 import { pluralize } from "./shared/shared";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type CrawlHistoryViewProps = {
     isLoading?: boolean;
@@ -21,6 +21,8 @@ export function CrawlHistoryView({
     onSelectCrawl,
     onNewPubCrawl,
 }: CrawlHistoryViewProps): ReactElement {
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     if (isLoading) {
         return <ScreenLoader label="Loading crawl history..." />;
     }

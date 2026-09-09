@@ -12,9 +12,10 @@ import {
     useWindowDimensions,
 } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { COLORS, SPACING, TYPOGRAPHY } from "@/styles/theme";
 import { ScreenLoader } from "@/views/components/ScreenLoader";
 import type { MediaPreviewItem } from "@/views/components/MediaPreviewStrip";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type MediaAlbumViewProps = {
     items: MediaPreviewItem[];
@@ -31,6 +32,8 @@ export function MediaAlbumView({
     isExporting,
     onExport,
 }: MediaAlbumViewProps): ReactElement {
+    const styles = useStyles();
+    const { COLORS } = useTheme();
     const { width: screenWidth } = useWindowDimensions();
 
     const safeInitialIndex = useMemo(() => {
@@ -141,7 +144,7 @@ export function MediaAlbumView({
     }
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY }) => StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#000000",
@@ -199,4 +202,4 @@ const styles = StyleSheet.create({
         color: COLORS.textSecondary,
         fontSize: TYPOGRAPHY.sizes.body,
     },
-});
+}));

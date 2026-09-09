@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { View, Image, Pressable, Text, StyleSheet } from "react-native";
-import { COLORS } from "@/styles/theme";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 export type MediaPreviewItem = {
     url: string;
@@ -18,6 +18,7 @@ export function MediaPreviewStrip({
     items,
     onPressItem,
 }: MediaPreviewStripProps): ReactElement | null {
+    const styles = useStyles();
     const resolvedItems: MediaPreviewItem[] =
         items ?? (imageUrls ?? []).map((url) => ({ url }));
 
@@ -68,7 +69,7 @@ export function MediaPreviewStrip({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS }) => StyleSheet.create({
     mediaRow: {
         flexDirection: "row",
         alignItems: "center",
@@ -102,4 +103,4 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         color: COLORS.textSecondary,
     },
-});
+}));

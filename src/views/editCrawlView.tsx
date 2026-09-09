@@ -2,8 +2,7 @@ import { ReactElement } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Pressable, ScrollView, Text, View } from "react-native";
-import { COLORS } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { TitleInput } from "@/views/components/TitleInput";
 import { ParticipantsAvatarStrip } from "@/views/components/ParticipantsAvatarStrip";
 import { ScreenLoader } from "@/views/components/ScreenLoader";
@@ -13,6 +12,7 @@ import { CrawlStopRow } from "@/views/components/CrawlStopRow";
 import { CrawlVisibilitySection } from "@/views/components/CrawlVisibilitySection";
 import { RefreshIndicator } from "@/views/components/RefreshIndicator";
 import { ConfirmModal } from "@/views/components/ConfirmModal";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type EditCrawlViewProps = {
     mode?: "new" | "active";
@@ -81,6 +81,8 @@ export function EditCrawlView({
     refreshing = false,
     onRefresh,
 }: EditCrawlViewProps): ReactElement {
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     const isActiveMode = mode === "active";
     const saveLabel = isActiveMode ? "Save Changes" : "Save";
     const saveLoadingLabel = isActiveMode ? "Saving Changes..." : "Saving...";

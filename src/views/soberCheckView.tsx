@@ -1,8 +1,8 @@
 import {ReactElement} from "react";
 import {StyleSheet, Text, View} from "react-native";
-import {COLORS, SPACING, TYPOGRAPHY} from "@/styles/theme";
 import {ActionButton} from "@/views/components/ActionButton";
-import {commonStyles} from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
+import { createThemedStyles } from "@/styles/createThemedStyles";
 
 export type GamePhase = "idle" | "countdown" | "playing" | "result";
 
@@ -44,6 +44,8 @@ export function SoberCheckView({
                                    onCancel,
                                    gameEnabled
                                }: SoberCheckViewProps): ReactElement {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
 
         if (!gameEnabled) {
             return (
@@ -153,7 +155,7 @@ export function SoberCheckView({
     }
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY }) => StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.background,
@@ -256,4 +258,4 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-});
+}));

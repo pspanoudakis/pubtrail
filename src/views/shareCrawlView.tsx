@@ -1,8 +1,9 @@
 import { ReactElement } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
+import { createThemedStyles } from "@/styles/createThemedStyles";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type ShareCrawlViewProps = {
     crawlId: string | null;
@@ -19,6 +20,9 @@ export function ShareCrawlView({
     onCopyId,
     copyFeedback,
 }: ShareCrawlViewProps): ReactElement {
+    const styles = useStyles();
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     return (
         <View style={[commonStyles.screenContent, styles.container]}>
             {crawlName ? <Text style={styles.title}>{crawlName}</Text> : null}
@@ -56,7 +60,7 @@ export function ShareCrawlView({
     );
 }
 
-const styles = StyleSheet.create({
+const useStyles = createThemedStyles(({ COLORS, SPACING, TYPOGRAPHY, RADIUS }) => StyleSheet.create({
     container: {
         alignItems: "center",
         gap: SPACING.md,
@@ -113,4 +117,4 @@ const styles = StyleSheet.create({
         color: COLORS.primary,
         fontSize: TYPOGRAPHY.sizes.small,
     },
-});
+}));

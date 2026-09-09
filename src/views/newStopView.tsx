@@ -1,10 +1,10 @@
 import { ReactElement } from "react";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { TextInput, View } from "react-native";
-import { COLORS } from "@/styles/theme";
-import { commonStyles } from "@/styles/commonStyles";
+import { useCommonStyles } from "@/styles/useCommonStyles";
 import { MediaPreviewStrip } from "@/views/components/MediaPreviewStrip";
 import { ActionButton } from "@/views/components/ActionButton";
+import { useTheme } from "@/styles/ThemeProvider";
 
 type EditStopViewProps = {
     stopName: string;
@@ -13,6 +13,8 @@ type EditStopViewProps = {
 };
 
 export function EditStopView({ stopName, mediaImageUrls, onSave }: EditStopViewProps): ReactElement {
+    const commonStyles = useCommonStyles();
+    const { COLORS } = useTheme();
     return (
         <>
             <View style={[commonStyles.screenContent, commonStyles.contentGap12]}>
