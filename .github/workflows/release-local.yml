@@ -1,0 +1,115 @@
+name: Build APK (local runner)
+
+# Alternative to the EAS-hosted pipeline in release.yml: the same `eas build`
+# runs with --local, so gradle executes on the GitHub runner instead of EAS
+# infrastructure. Useful when the EAS build queue is slow or the free tier is
+# exhausted. Produces the APK as a workflow artifact; release.yml is still what
+# cuts GitHub releases.
+on:
+  push:
+    branches: [release-local]
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: EAS build profile
+        default: preview
+        type: string
+
+concurrency:
+  group: build-local-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build APK on runner
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      # A local Android build (gradle caches, NDK, node_modules) runs close to
+      # the runner's disk limit. Reclaim the preinstalled toolchains we do not use.
+      # - name: Free disk space
+      #   run: |
+      #     sudo rm -rf /usr/share/dotnet /usr/local/lib/android/sdk/ndk /opt/ghc /usr/local/share/boost
+      #     df -h /
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # Expo's Android builds target JDK 17.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+          packager: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # EAS environment variables are only injected by EAS-hosted builds, so a
+      # local build needs the values on disk. Expo loads .env automatically when
+      # bundling, which is where every EXPO_PUBLIC_* value comes from.
+      - name: Write .env
+        env:
+          DOTENV: ${{ secrets.DOTENV_PREVIEW }}
+        run: |
+          if [ -z "$DOTENV" ]; then
+            echo "::error::DOTENV_PREVIEW secret is empty - the APK would ship with undefined keys."
+            exit 1
+          fi
+          printf '%s\n' "$DOTENV" > .env
+          echo "Wrote .env with $(grep -c '=' .env) values"
+
+      # `eas build --local` does not touch EAS remote version management, so
+      # without this the APK would carry the placeholder versionCode 1 - lower
+      # than the hosted builds have reached, and therefore not installable over
+      # an existing app. Resolve the shared counter explicitly instead.
+      - name: Resolve versionCode
+        run: |
+          set -euo pipefail
+          current=$(eas build:version:get --platform android --non-interactive --json | jq -r '.versionCode // empty')
+          if ! [[ "$current" =~ ^[0-9]+$ ]]; then
+            echo "::error::Could not read the remote versionCode from EAS (got '$current')."
+            exit 1
+          fi
+          echo "ANDROID_VERSION_CODE=$((current + 1))" >> "$GITHUB_ENV"
+          echo "Building versionCode $((current + 1)) (remote counter was $current)"
+
+      # --local runs prebuild and gradle here. Signing credentials are still
+      # fetched from EAS using EXPO_TOKEN, so the APK is signed with the same
+      # keystore as the hosted pipeline and remains installable as an update.
+      # `inputs` is empty on push events, so fall back to the dispatch default.
+      - name: Build APK
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          eas build \
+            --platform android \
+            --profile "${{ inputs.profile || 'preview' }}" \
+            --local \
+            --non-interactive \
+            --output dist/pubtrail.apk
+
+      # Keeps one counter across both pipelines, so a later hosted build cannot
+      # reuse a versionCode this build already shipped.
+      - name: Advance remote versionCode
+        run: eas build:version:set --platform android --version "$ANDROID_VERSION_CODE" --non-interactive
+
+      - name: Remove .env
+        if: always()
+        run: rm -f .env
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pubtrail-apk
+          path: dist/pubtrail.apk
+          if-no-files-found: error
+          retention-days: 14
