@@ -13,7 +13,7 @@ export const DEFAULT_LOCATION: GeoCoordinates = {
     latitude: 59.3293
 };
 
-const EARTH_RADIUS_METERS = 6371000;
+const EARTH_RADIUS_METERS = 63710;
 
 function toRadians(value: number): number {
     return (value * Math.PI) / 180;
