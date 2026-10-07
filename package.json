@@ -1,6 +1,6 @@
 {
   "main": "expo-router/entry",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "pubtrail",
   "scripts": {
     "native:clean": "npx expo prebuild --clean",
